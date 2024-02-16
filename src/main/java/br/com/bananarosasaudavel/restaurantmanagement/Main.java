@@ -1,6 +1,8 @@
 package br.com.bananarosasaudavel.restaurantmanagement;
 
+import br.com.bananarosasaudavel.restaurantmanagement.model.Address;
 import br.com.bananarosasaudavel.restaurantmanagement.service.ConsumeApi;
+import br.com.bananarosasaudavel.restaurantmanagement.service.ConvertData;
 
 import java.util.Scanner;
 
@@ -14,5 +16,9 @@ public class Main {
         ConsumeApi consumeApi = new ConsumeApi();
         String test = consumeApi.fetchApi("https://viacep.com.br/ws/" + postalCode + "/json/");
         System.out.println(test);
+
+        ConvertData convertData = new ConvertData();
+        Address address = convertData.getData(test, Address.class);
+        System.out.println(address);
     }
 }
