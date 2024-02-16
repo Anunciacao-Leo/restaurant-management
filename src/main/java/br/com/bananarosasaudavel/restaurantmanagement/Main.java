@@ -1,9 +1,10 @@
 package br.com.bananarosasaudavel.restaurantmanagement;
 
-import br.com.bananarosasaudavel.restaurantmanagement.model.AddressClass;
+import br.com.bananarosasaudavel.restaurantmanagement.model.Address;
+import br.com.bananarosasaudavel.restaurantmanagement.model.AddressData;
+import br.com.bananarosasaudavel.restaurantmanagement.model.Customer;
 import br.com.bananarosasaudavel.restaurantmanagement.service.ConsumeApi;
 import br.com.bananarosasaudavel.restaurantmanagement.service.ConvertData;
-import br.com.bananarosasaudavel.restaurantmanagement.service.ConvertDataInterface;
 
 import java.util.Scanner;
 
@@ -13,12 +14,32 @@ public class Main {
     private ConvertData convertData = new ConvertData();
 
     public void displayMenu(){
+        System.out.println("Enter the full name of the customer: ");
+        var fullName = scanner.nextLine();
+
+        System.out.println("Enter the e-mail address of the customer: ");
+        var emailAddress = scanner.nextLine();
+
+        System.out.println("Enter the phone number of the customer: ");
+        var phoneNumber = scanner.nextLine();
+
         System.out.println("Enter the desired postal code (numbers only): ");
         String postalCode = scanner.nextLine();
 
         String json = consumeApi.fetchApi("https://viacep.com.br/ws/" + postalCode + "/json/");
 
-        AddressClass addressClass = convertData.getData(json, AddressClass.class);
-        System.out.println(addressClass);
+        AddressData addressData = convertData.getData(json, AddressData.class);
+
+        System.out.println("Enter the house number: ");
+        var number = scanner.nextLine();
+
+        System.out.println("Enter the unit: ");
+        var unit = scanner.nextLine();
+
+        Address address = new Address(addressData, number, unit);
+
+        Customer customer = new Customer(fullName, emailAddress, phoneNumber, address);
+        System.out.println(customer);
+
     }
 }

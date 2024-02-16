@@ -1,23 +1,32 @@
 package br.com.bananarosasaudavel.restaurantmanagement.model;
 
-import br.com.bananarosasaudavel.restaurantmanagement.service.ConvertDataInterface;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressClass {
-    @JsonAlias("cep")
+
+public class Address {
+
     private String postalCode;
-    @JsonAlias("logradouro")
+
     private String streetAddress;
     private String number;
     private String unit;
-    @JsonAlias("bairro")
+
     private String addressLine2;
-    @JsonAlias("localidade")
+
     private String city;
-    @JsonAlias("uf")
+
     private String state;
+
+    public Address(AddressData addressData, String number, String unit) {
+        this.postalCode = addressData.postalCode();
+        this.streetAddress = addressData.streetAddress();
+        this.number = number;
+        this.unit = unit;
+        this.addressLine2 = addressData.addressLine2();
+        this.city = addressData.city();
+        this.state = addressData.state();
+    }
 
     public String getPostalCode() {
         return postalCode;
@@ -77,12 +86,12 @@ public class AddressClass {
 
     @Override
     public String toString() {
-        return "AddressClass{" +
-                "postalCode='" + postalCode + '\'' +
+        return "postalCode='" + postalCode + '\'' +
                 ", streetAddress='" + streetAddress + '\'' +
+                ", number='" + number + '\'' +
+                ", unit='" + unit + '\'' +
                 ", addressLine2='" + addressLine2 + '\'' +
                 ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                '}';
+                ", state='" + state + '\'';
     }
 }
