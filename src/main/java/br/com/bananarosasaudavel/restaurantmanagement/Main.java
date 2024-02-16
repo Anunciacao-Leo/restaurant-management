@@ -1,6 +1,6 @@
 package br.com.bananarosasaudavel.restaurantmanagement;
 
-import br.com.bananarosasaudavel.restaurantmanagement.services.ConsumeApi;
+import br.com.bananarosasaudavel.restaurantmanagement.service.ConsumeApi;
 
 import java.util.Scanner;
 

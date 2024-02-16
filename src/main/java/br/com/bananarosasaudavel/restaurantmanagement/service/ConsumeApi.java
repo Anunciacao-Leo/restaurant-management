@@ -1,4 +1,4 @@
-package br.com.bananarosasaudavel.restaurantmanagement.services;
+package br.com.bananarosasaudavel.restaurantmanagement.service;
 
 import java.io.IOException;
 import java.net.URI;
