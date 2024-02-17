@@ -1,21 +1,12 @@
 package br.com.bananarosasaudavel.restaurantmanagement.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-
 public class Address {
-
     private String postalCode;
-
     private String streetAddress;
     private String number;
     private String unit;
-
     private String addressLine2;
-
     private String city;
-
     private String state;
 
     public Address(AddressData addressData, String number, String unit) {
