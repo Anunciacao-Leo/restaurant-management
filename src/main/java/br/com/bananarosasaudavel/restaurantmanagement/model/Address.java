@@ -1,13 +1,30 @@
 package br.com.bananarosasaudavel.restaurantmanagement.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "enderecos")
 public class Address {
+    private Long id;
+    @Column(name = "cep")
     private String postalCode;
+    @Column(name = "logradouro")
     private String streetAddress;
+    @Column(name = "numero")
     private String number;
+    @Column(name = "complemento")
     private String unit;
+    @Column(name = "bairro")
     private String addressLine2;
+    @Column(name = "cidade")
     private String city;
+    @Column(name = "estado")
     private String state;
+
+    public Address() {
+    }
 
     public Address(AddressData addressData, String number, String unit) {
         this.postalCode = addressData.postalCode();
