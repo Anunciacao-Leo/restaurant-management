@@ -9,4 +9,12 @@ public record AddressData(@JsonAlias("cep") String postalCode,
                           @JsonAlias("bairro") String addressLine2,
                           @JsonAlias("localidade") String city,
                           @JsonAlias("uf") String state) {
+    @Override
+    public String toString() {
+        return "CEP:" + postalCode +
+                "\nLogradouro: " + streetAddress +
+                "\nBairro: " + addressLine2 +
+                "\nCidade: " + city +
+                "\nUF: " + state;
+    }
 }
