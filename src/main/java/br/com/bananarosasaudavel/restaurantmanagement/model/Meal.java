@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Meal {
     private MealType mealType;
-    private Map<Recipie, Double> recipieList;
+    private Map<Recipe, Double> recipieList;
 
     public Meal() {
     }
@@ -17,11 +17,11 @@ public class Meal {
         this.mealType = mealType;
     }
 
-    public Map<Recipie, Double> getRecipieList() {
+    public Map<Recipe, Double> getRecipieList() {
         return recipieList;
     }
 
-    public void setRecipieList(Map<Recipie, Double> recipieList) {
+    public void setRecipieList(Map<Recipe, Double> recipieList) {
         this.recipieList = recipieList;
     }
 }

@@ -22,7 +22,7 @@ public class Address {
     private String city;
     @Column(name = "estado")
     private String state;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

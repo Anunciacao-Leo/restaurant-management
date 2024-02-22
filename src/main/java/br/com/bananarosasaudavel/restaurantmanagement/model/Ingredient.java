@@ -1,12 +1,15 @@
 package br.com.bananarosasaudavel.restaurantmanagement.model;
 
+import java.util.List;
+
 public class Ingredient {
     private Long id;
     private String name;
     private  MeasurementUnit measurementUnit;
     private Double quantitySold;
     private Double price;
-    private Double yield;
+    private Double ingredientYield;
+    private List<Recipe> recipe;
 
     public Ingredient() {
     }
@@ -51,11 +54,11 @@ public class Ingredient {
         this.price = price;
     }
 
-    public Double getYield() {
-        return yield;
+    public Double getIngredientYield() {
+        return ingredientYield;
     }
 
-    public void setYield(Double yield) {
-        this.yield = yield;
+    public void setIngredientYield(Double ingredientYield) {
+        this.ingredientYield = ingredientYield;
     }
 }

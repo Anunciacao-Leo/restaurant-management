@@ -8,14 +8,19 @@ import br.com.bananarosasaudavel.restaurantmanagement.repository.CustomerReposit
 import br.com.bananarosasaudavel.restaurantmanagement.service.ConsumeApi;
 import br.com.bananarosasaudavel.restaurantmanagement.service.ConvertData;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
     public Scanner scanner = new Scanner(System.in);
     private ConsumeApi consumeApi = new ConsumeApi();
     private ConvertData convertData = new ConvertData();
+    private List<Customer> customerList;
     private AddressRepository addressRepository;
     private CustomerRepository customerRepository;
+
 
     public Main(AddressRepository addressRepository, CustomerRepository customerRepository) {
         this.addressRepository = addressRepository;
@@ -23,11 +28,15 @@ public class Main {
     }
 
     public void displayMenu(){
-        var choice = 0;
+        var choice = -1;
         do {
             System.out.println("Menu:");
             System.out.println("1. Cadastrar cliente");
-            System.out.println("2. Sair");
+            System.out.println("2. Listar clientes cadastrados");
+            System.out.println("3. Buscar cliente cadastrado por nome");
+            System.out.println("4. Buscar endereço cadastrado por cliente");
+            System.out.println("5. Cadastrar novo endereço");
+            System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             choice = scanner.nextInt();
             scanner.nextLine();
@@ -37,12 +46,24 @@ public class Main {
                     createCustomerAndAddress();
                     break;
                 case 2:
+                    listCustomers();
+                    break;
+                case 3:
+                    findCustomerByFullName();
+                    break;
+                case 4:
+                    findAddressByCustomer();
+                    break;
+                case 5:
+                    insertNewAddress();
+                    break;
+                case 0:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        } while (choice != 2);
+        } while (choice != 0);
     }
 
     private Customer insertCustomerData() {
@@ -60,6 +81,12 @@ public class Main {
         customer.setTelephoneNumber(telephoneNumber);
 
         return customer;
+    }
+
+    private AddressData getAddressData(String postalCode){
+        String json = consumeApi.fetchApi("https://viacep.com.br/ws/" + postalCode + "/json/");
+
+        return convertData.getData(json, AddressData.class);
     }
 
     private Address insertAddressData() {
@@ -91,7 +118,8 @@ public class Main {
         Customer customer = insertCustomerData();
         Address address = insertAddressData();
 
-        address.setCustomer(customer);
+        customer.addAddress(address);
+
 
         Customer savedCustomer = customerRepository.save(customer);
         System.out.println("Cliente salvo com sucesso com ID: " + savedCustomer.getId());
@@ -100,9 +128,51 @@ public class Main {
         System.out.println("Endereço salvo com sucesso com ID: " + savedAddress.getId());
     }
 
-    private AddressData getAddressData(String postalCode){
-        String json = consumeApi.fetchApi("https://viacep.com.br/ws/" + postalCode + "/json/");
-
-        return convertData.getData(json, AddressData.class);
+    public void listCustomers(){
+        customerList = customerRepository.findAll();
+        customerList.stream()
+                        .sorted(Comparator.comparing(Customer::getFullName))
+                                .forEach(System.out::println);
     }
+
+    private Optional<Customer> findCustomerByFullName() {
+        System.out.println("Digite o nome do cliente: ");
+        var customerName = scanner.nextLine();
+
+        Optional<Customer> foundCustomer = customerRepository.
+                findByFullNameContainingIgnoreCase(customerName);
+        if (foundCustomer.isPresent()){
+            System.out.println("Cliente buscado: " + foundCustomer.get());
+            return foundCustomer;
+        } else {
+            System.out.println("Cliente não encontrado.");
+            return Optional.empty();
+        }
+    }
+    private void findAddressByCustomer() {
+        Optional<Customer> foundCustomer = findCustomerByFullName();
+
+        List<Address> addressList = addressRepository.findByCustomer(foundCustomer);
+        for (Address address : addressList) {
+            System.out.println("Endereço ID: " + address.getId());
+            System.out.println("CEP: " + address.getPostalCode());
+            System.out.println("Logradouro: " + address.getStreetAddress());
+            System.out.println("Número: " + address.getNumber());
+            System.out.println("Complemento: " + address.getUnit());
+            System.out.println("Bairro: " + address.getAddressLine2());
+            System.out.println("Cidade: " + address.getCity());
+            System.out.println("Estado: " + address.getState());
+            System.out.println("Cliente ID: " + address.getCustomer().getId());
+        }
+    }
+    private void insertNewAddress() {
+        Address address = insertAddressData();
+        Optional<Customer> foundCustomer = findCustomerByFullName();
+        Customer customer = foundCustomer.get();
+        customer.addAddress(address);
+
+        Address savedAddress = addressRepository.save(address);
+        System.out.println("Endereço salvo com sucesso com ID: " + savedAddress.getId());
+    }
+
 }

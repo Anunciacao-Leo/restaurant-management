@@ -1,14 +1,16 @@
 package br.com.bananarosasaudavel.restaurantmanagement.model;
 
+import jakarta.persistence.*;
+
 import java.util.List;
 
-public class Recipie {
+public class Recipe {
     private Long id;
     private String name;
     private String description;
     private List<Ingredient> ingredientList;
 
-    public Recipie() {
+    public Recipe() {
     }
 
     public Long getId() {

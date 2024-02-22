@@ -2,6 +2,10 @@ package br.com.bananarosasaudavel.restaurantmanagement.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Entity
 @Table(name = "clientes")
 public class Customer {
@@ -14,6 +18,21 @@ public class Customer {
     private String emailAddress;
     @Column(name = "telefone")
     private String telephoneNumber;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Address> addressList = new ArrayList<>();
+
+    public void addAddress(Address address){
+        this.addressList.add(address);
+        address.setCustomer(this);
+    }
+
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
+    }
 
     public Customer() {
     }
@@ -50,4 +69,10 @@ public class Customer {
         this.telephoneNumber = telephoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Nome completo: " + fullName +
+                ", E-mail: " + emailAddress +
+                ", Telefone: " + telephoneNumber;
+    }
 }
